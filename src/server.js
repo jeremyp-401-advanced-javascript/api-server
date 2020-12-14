@@ -1,8 +1,20 @@
 'use strict';
 
 // Create an Express server instance named 'app'
-const express = require('express');
-const app = express();
+require('dotenv').config(); // Access .env to read in environmental variables
+const express = require('express'); // JS server library
+const mongoose = require('mongoose'); // Mongo interaction library
+let app = express();
+
+// New instance of the collection
+const TacoCollection = require('./models/TacoCollection');
+const DrinkCollection = require('./models/DrinkCollection');
+
+// Mongoose Options
+const options = { useNewUrlParser: true, useUnifiedTopology: true };
+
+// Connect to Mongoose
+mongoose.connect(process.env.MONGODB_URI, options);
 
 // Localize Middleware Modules
 const logger = require('./middleware/logger');
@@ -16,20 +28,7 @@ app.use(express.json());
 app.use(logger);
 app.use(tacoRoutes);
 app.use(drinkRoutes);
-
-app.post('/test', (req, res, next) => {
-  res.status(200).send(req.body);
-});
-
-// TODO: Does it at least start? Remove once creating routes.
-app.get('/pol', proofOfLifeHandler);
-
-function proofOfLifeHandler(req, res, next){
-  res.status(200).send('Well... It at least does this...');
-}
-
-// TODO: What's missing? Probably nothing, but I should double check.
-
+// Error Handler Middleware
 app.use('*', notFoundHandler);
 app.use(serverErrorHandler);
 
