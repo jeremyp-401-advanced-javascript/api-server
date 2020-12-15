@@ -19,7 +19,7 @@
 **Required Parameters:**
 
 >Request Body:
->- name - _String_  
+>- name - _String_
 >- type - _String_  
 >- size - _String_  
 
